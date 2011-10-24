@@ -16,9 +16,9 @@ describe OAuth2::Model::Client do
     @client.should_not be_valid
   end
   
-  it "is invalid without a redirect_uri" do
+  it "is valid without a redirect_uri" do
     @client.redirect_uri = nil
-    @client.should_not be_valid
+    @client.should be_valid
   end
   
   it "is invalid with a non-URI redirect_uri" do

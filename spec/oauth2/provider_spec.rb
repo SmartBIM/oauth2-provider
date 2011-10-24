@@ -11,6 +11,7 @@ describe OAuth2::Provider do
   
   before do
     @client = Factory(:client, :name => 'Test client')
+		@client_without_redirect_uri = Factory(:client, :name => 'Test client no redirect', :redirect_uri => '')
     @owner  = TestApp::User['Bob']
   end
   
@@ -170,6 +171,14 @@ describe OAuth2::Provider do
         response['location'].should == 'https://client.example.com/cb?error=invalid_request&error_description=Missing+required+parameter+response_type'
       end
     end
+
+		describe "with a client_id for non-redirect_uri client" do
+			let(:params) { {'redirect_uri' => 'http://other.example.com/callback',
+									    'client_id'    => @client_without_redirect_uri.client_id,
+			                'response_type' => 'code'} }
+
+			it_should_behave_like "asks for user permission"
+		end
     
     describe "with an invalid request" do
       before { params.delete('response_type') }

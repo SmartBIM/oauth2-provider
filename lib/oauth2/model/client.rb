@@ -11,7 +11,7 @@ module OAuth2
       has_many :authorizations, :class_name => 'OAuth2::Model::Authorization', :dependent => :destroy
       
       validates_uniqueness_of :client_id
-      validates_presence_of   :name, :redirect_uri
+      validates_presence_of   :name
       validate :check_format_of_redirect_uri
       
       attr_accessible :name, :redirect_uri
@@ -38,6 +38,7 @@ module OAuth2
     private
       
       def check_format_of_redirect_uri
+				return if redirect_uri.blank?
         uri = URI.parse(redirect_uri)
         errors.add(:redirect_uri, 'must be an absolute URI') unless uri.absolute?
       rescue
