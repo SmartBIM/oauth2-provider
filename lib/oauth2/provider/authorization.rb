@@ -72,7 +72,7 @@ module OAuth2
       
       def redirect_uri
         return nil unless @client
-        base_redirect_uri = @client.redirect_uri || @params['redirect_uri']
+        base_redirect_uri = @client.redirect_uri? ? @client.redirect_uri : @params[REDIRECT_URI]
         
         if not valid?
           query = to_query_string(ERROR, ERROR_DESCRIPTION, STATE)
